@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class Simulator
 {
+   private static final double C = 3.0e8;
+   
    // This should be the list containing all of the nodes that can SEE EACH OTHER.
    // This is used to simulate the "broadcasting" the message since we are sending
    // the data through the air frequency.
@@ -48,6 +50,34 @@ public class Simulator
       nodeA.send("B", data);
       nodeB.receive("B", data);
       
+      // Begin Calculations
+      int size = 10000;
+      int bandwidth = 1500;
+      int queue = 0;
+      
+      int PoissonVal = 0; // Right now just 0, should be a method to change the value each time.
+      // Should probably have some kind of loop to increase the file size
+      double propagation = (double) distance / C;
+      double transmit = size / bandwidth;
+      double latency = propagation + transmit + queue;
+      
+      double RTT = latency * bandwidth;
+      
+      // Calculate transfer time (varied based on asychronous transfer)
+      int totalSize = size;
+      double transferTime = 0;
+      while (totalSize >= 0)
+      {
+         transferTime = (RTT + PoissonVal) + 1/bandwidth * maxPacketSize; // Need to change maxPacketSize to bits.
+         totalSize -= maxPacketSize;
+      }
+      
+      double throughput = size / transferTime;
+      
+      System.out.println("");
+      System.out.println("---------------Results---------------");
+      System.out.println("Total Transfer Time: " + transferTime);
+      System.out.println("Throughput: " + throughput);
    }
    
    public static void main(String[] args)
