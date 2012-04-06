@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Simulator
 {
@@ -10,6 +11,17 @@ public class Simulator
    
    public void run()
    {
+      // Grab user input
+      Scanner input = new Scanner(System.in);
+      
+      System.out.print("Distance of each node (in Meters):");
+      int distance = input.nextInt();
+      
+      System.out.print("Maximum packet size (in Bytes):");
+      int maxPacketSize = input.nextInt();
+              
+      // Begin Simulation   
+      System.out.println("---------------Beginning Simulation---------------");
       // For now, just simulate two nodes sending 10X Mbits file 5 times so
       // 10 Mb
       // 20 Mb
