@@ -52,10 +52,11 @@ public class Simulator
       
       // Begin Calculations
       int size = 10000;
-      int bandwidth = 1500;
+      int bandwidth = 54000000; //54Mbps
+      int rate = 5000000; //5Mbps
       int queue = 0;
       
-      int PoissonVal = 0; // Right now just 0, should be a method to change the value each time.
+      double PoissonVal = poisson(rate,size); // Right now just 0, should be a method to change the value each time.
       // Should probably have some kind of loop to increase the file size
       double propagation = (double) distance / C;
       double transmit = size / bandwidth;
@@ -78,6 +79,24 @@ public class Simulator
       System.out.println("---------------Results---------------");
       System.out.println("Total Transfer Time: " + transferTime);
       System.out.println("Throughput: " + throughput);
+   }
+
+   private static double poisson(int avg_arrival_rate, int packet_size)
+   {
+       Random random = new Random();
+       int r = random.nextInt(10);
+       double lambda = avg_arrival_rate/packet_size;
+       double actual_arrival_rate = (Math.exp(-lambda)*Math.pow(lambda,r))/factorial(r);
+       return actual_arrival_rate;
+   }
+
+   private static int factorial(int r)
+   {
+       int total = 1;
+       while(r>0) {
+           total *= r--;
+       }
+       return total;
    }
    
    public static void main(String[] args)

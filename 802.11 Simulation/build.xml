@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Wifisim" default="run" basedir=".">
+<project name="Wifisim" default="all" basedir=".">
+
     <property name="src" value="src"/>
     <property name="bin" value="bin"/>
     <property name="main" value="Simulator"/>
+    <property name="input" value="foo"/>
 
     <target name="compile" depends="clean">
         <mkdir dir="${bin}"/>
@@ -17,10 +19,15 @@
         </jar>
     </target>
 
-    <target name="run" depends="jar">
-        <java jar="${bin}/${main}.jar" fork="true">
+    <target name="all" depends="jar">
+        <java jar="${bin}/${main}.jar" fork="true" spawn="true">
             <arg value="${input}"/>
         </java>
+    </target>
+
+    <target name="run">
+        <echo message="Please run this command below instead:"/>
+        <echo message="java -jar ${bin}/${main}.jar"/>
     </target>
 
     <target name="clean">
