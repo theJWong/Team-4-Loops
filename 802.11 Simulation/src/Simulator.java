@@ -99,9 +99,22 @@ public class Simulator
        return total;
    }
    
+   private static int toBits(int bytes)
+   {
+       /*Declarations*/
+       int bits;
+       final int eight = 8;
+       
+       bits = eight * bytes; //formula to convert
+       
+       return bits;
+       
+   }
+   
    public static void main(String[] args)
    {
       Simulator sim = new Simulator();
       sim.run();
+      
    }
 }
