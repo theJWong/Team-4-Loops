@@ -1,0 +1,38 @@
+Distance of each node (in Meters):100
+Maximum packet size (in Bytes):512
+---------------Beginning Simulation---------------
+[A]: Sending RTS to Node B
+[B]: Receiving RTS from Node B
+[B]: Sending CTS to Node A
+[A]: Receiving CTS from Node A
+[A]: Sending DATA to Node B
+[B]: Receiving DATA from Node B
+
+//int size = 10Mbit
+---------------Results---------------
+Total Transfer Time: 18.0
+Throughput: 555555.5555555555
+
+//int size = 20Mbit
+
+---------------Results---------------
+Total Transfer Time: 18.0
+Throughput: 1111111.111111111
+
+//int size = 30Mbit
+
+---------------Results---------------
+Total Transfer Time: 18.0
+Throughput: 1666666.6666666667
+
+//int size = 40Mbit
+
+---------------Results---------------
+Total Transfer Time: 18.0
+Throughput: 2222222.222222222
+
+//int size = 50Mbit
+
+---------------Results---------------
+Total Transfer Time: 18.0
+Throughput: 2777777.777777778
