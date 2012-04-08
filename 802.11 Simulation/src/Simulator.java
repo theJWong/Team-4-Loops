@@ -21,6 +21,7 @@ public class Simulator
       
       System.out.print("Maximum packet size (in Bytes):");
       int maxPacketSize = input.nextInt();
+      maxPacketSize = toBits(maxPacketSize);
               
       // Begin Simulation   
       System.out.println("---------------Beginning Simulation---------------");
@@ -56,29 +57,33 @@ public class Simulator
       int rate = 5000000; //5Mbps
       int queue = 0;
       
-      double PoissonVal = poisson(rate,size); // Right now just 0, should be a method to change the value each time.
       // Should probably have some kind of loop to increase the file size
-      double propagation = (double) distance / C;
-      double transmit = size / bandwidth;
-      double latency = propagation + transmit + queue;
-      
-      double RTT = latency * bandwidth;
-      
-      // Calculate transfer time (varied based on asychronous transfer)
-      int totalSize = size;
-      double transferTime = 0;
-      while (totalSize >= 0)
+      for (int i = 0; i < 5; i++)
       {
-         transferTime = (RTT + PoissonVal) + 1/bandwidth * maxPacketSize; // Need to change maxPacketSize to bits.
-         totalSize -= maxPacketSize;
+         double propagation = (double) distance / C;
+         double transmit = size / bandwidth;
+         double latency = propagation + transmit + queue;
+
+         double RTT = latency * bandwidth;
+
+         // Calculate transfer time (varied based on asychronous transfer)
+         int totalSize = size;
+         double transferTime = 0;
+         while (totalSize >= 0)
+         {
+            transferTime += (RTT + poisson(rate,size)) + 1/bandwidth * maxPacketSize; // Need to change maxPacketSize to bits.
+            totalSize -= maxPacketSize;
+         }
+
+         double throughput = size / transferTime;
+         
+         System.out.println("");
+         System.out.println("---------------Results---------------");
+         System.out.println("File Size : " + size);
+         System.out.println("Total Transfer Time: " + transferTime);
+         System.out.println("Throughput: " + throughput);
+         size += 10000;
       }
-      
-      double throughput = size / transferTime;
-      
-      System.out.println("");
-      System.out.println("---------------Results---------------");
-      System.out.println("Total Transfer Time: " + transferTime);
-      System.out.println("Throughput: " + throughput);
    }
 
    private static double poisson(int avg_arrival_rate, int packet_size)
