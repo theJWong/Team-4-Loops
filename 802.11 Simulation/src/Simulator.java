@@ -71,7 +71,7 @@ public class Simulator
          double transferTime = 0;
          while (totalSize >= 0)
          {
-            transferTime += (RTT + poisson(rate,size)) + 1/bandwidth * maxPacketSize; // Need to change maxPacketSize to bits.
+            transferTime += (RTT + poisson(rate,size)) + 1/bandwidth * maxPacketSize;
             totalSize -= maxPacketSize;
          }
 
@@ -79,9 +79,9 @@ public class Simulator
          
          System.out.println("");
          System.out.println("---------------Results---------------");
-         System.out.println("File Size : " + size);
-         System.out.println("Total Transfer Time: " + transferTime);
-         System.out.println("Throughput: " + throughput);
+         System.out.println("File Size : " + size + " bits");
+         System.out.println("Total Transfer Time: " + transferTime + " seconds");
+         System.out.println("Throughput: " + throughput + " bps");
          size += 10000;
       }
    }
