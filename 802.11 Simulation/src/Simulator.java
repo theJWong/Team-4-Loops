@@ -52,8 +52,8 @@ public class Simulator
       nodeB.receive("B", data);
       
       // Begin Calculations
-      int size = 10000;
-      int bandwidth = 54000000; //54Mbps
+      double size = 100000000;
+      double bandwidth = 54000000; //54Mbps
       int rate = 5000000; //5Mbps
       int queue = 0;
       
@@ -63,30 +63,53 @@ public class Simulator
          double propagation = (double) distance / C;
          double transmit = size / bandwidth;
          double latency = propagation + transmit + queue;
-
-         double RTT = latency * bandwidth;
+         double RTT = 2 * latency;
 
          // Calculate transfer time (varied based on asychronous transfer)
-         int totalSize = size;
+         double totalSize = size;
          double transferTime = 0;
-         while (totalSize >= 0)
+         transferTime = (RTT + poisson(rate, size)) + (1 / bandwidth) * size;
+         double tempTime = transferTime;
+         while (totalSize > 0)
          {
-            transferTime += (RTT + poisson(rate,size)) + 1/bandwidth * maxPacketSize;
+            tempTime += poisson(RTT)  + (1 / bandwidth) * size;
             totalSize -= maxPacketSize;
          }
 
-         double throughput = size / transferTime;
+         double throughput = size / tempTime;
          
          System.out.println("");
          System.out.println("---------------Results---------------");
          System.out.println("File Size : " + size + " bits");
          System.out.println("Total Transfer Time: " + transferTime + " seconds");
          System.out.println("Throughput: " + throughput + " bps");
-         size += 10000;
+         size += 100000000;
       }
    }
+   
+   public static int poisson(double lambda) {
+      // using algorithm given by Knuth
+      // see http://en.wikipedia.org/wiki/Poisson_distribution
+      int k = 0;
+      double p = 1.0;
+      double L = Math.exp(-lambda);
+      do {
+         k++;
+         p *= uniform(10);
+      } while (p >= L);
+      return k - 1;
+   }
 
-   private static double poisson(int avg_arrival_rate, int packet_size)
+   /**
+    * Return an integer uniformly between 0 and N-1.
+    */
+   public static int uniform(int N) {
+      Random random = new Random();
+      return random.nextInt(N);
+   }
+
+
+   private static double poisson(int avg_arrival_rate, double packet_size)
    {
        Random random = new Random();
        int r = random.nextInt(10);
