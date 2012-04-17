@@ -6,6 +6,7 @@ public class Node
    private String ID;
    private String status;
    
+   /* */
    public Node(String id)
    {
       ID = id;
