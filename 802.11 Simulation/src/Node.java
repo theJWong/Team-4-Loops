@@ -69,6 +69,16 @@ public class Node
       return true;
    }
    
+   /* expected backoff takes in number of collisions.
+    * returns a time represented as a double
+    */
+   public double backoff(int collision)
+   {
+       
+       return (Math.pow(2, collision) - 1) / 2; //http://en.wikipedia.org/wiki/Exponential_backoff
+ 
+   }
+   
    public String getStatus()
    {
       return status;
