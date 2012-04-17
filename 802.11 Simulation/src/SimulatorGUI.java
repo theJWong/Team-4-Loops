@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,11 +9,11 @@ public class SimulatorGUI
 {  
    public static void main(String[] args)
    {
-	   JFrame frame = new JFrame();
+	   JFrame frame = new JFrame("Team 4 Loops Simulator");
 	   JPanel topPanel = new JPanel();
 	   final JPanel bottomPanel = new JPanel();
 	   
-	   frame.setLayout(new FlowLayout());
+	   frame.setLayout(new BorderLayout());
 	   
 	   //TOP PANEL
 	   JLabel distanceLabel = new JLabel("Distance");
@@ -25,8 +26,13 @@ public class SimulatorGUI
 	   
 	   
 	   //BOTTOM PANEL
-	   JTextArea resultsBox = new JTextArea(50, 600);
-	   JScrollPane scrollPane = new JScrollPane(resultsBox); 
+	   final JTextField resultsBox = new JTextField(50);
+           final JTextArea textArea = new JTextArea(40,40);
+           textArea.setLineWrap(true);
+	   final JScrollPane scrollPane = new JScrollPane(textArea); 
+             scrollPane.setSize(80, 80);
+           scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+           scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	   resultsBox.setEditable(false);
 	   
 	   
@@ -38,25 +44,34 @@ public class SimulatorGUI
 	   topPanel.add(numOfNodes);
 	   topPanel.add(submitButton);
 	   
-	   submitButton.addActionListener(new ActionListener(){
+	   
+	   
+	     bottomPanel.add(scrollPane);
+         //  bottomPanel.add(textArea);
+	   
+	   frame.add(topPanel, BorderLayout.NORTH);
+	   frame.add(bottomPanel, BorderLayout.CENTER);
+	   
+       frame.setSize(1000, 200);
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.pack();
+       frame.setVisible(true);
+       
+       submitButton.addActionListener(new ActionListener(){
             @Override
 			  public void actionPerformed(ActionEvent e)
 			  {
-				  //resultsBox.setText(distance.getText());
+
+                              
+				  textArea.append( distance.getText() + "\n");
+                                  textArea.append("make this box frame" + "\n");
+            
 			  }
 			    
 		   });
-	   
-	   resultsBox.setText("THIS IS A TEST");
-	   
-	   bottomPanel.add(scrollPane);
-	   
-	   frame.add(topPanel);
-	   frame.add(bottomPanel);
-	   
-	   frame.setSize(1000, 200);
-       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.setVisible(true);
+       
+       
+    
 	   
       
    }
