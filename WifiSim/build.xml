@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Wifisim" default="all" basedir=".">
+
+    <property name="src" value="src"/>
+    <property name="bin" value="bin"/>
+    <property name="main" value="Simulator"/>
+    <property name="input" value="foo"/>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${bin}"/>
+        <javac srcdir="${src}" destdir="${bin}" includeantruntime="false"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${bin}/${main}.jar" basedir="${bin}">
+            <manifest>
+                <attribute name="Main-Class" value="${main}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="all" depends="jar">
+        <java jar="${bin}/${main}.jar" fork="true">
+            <arg value="${input}"/>
+        </java>
+    </target>
+
+    <target name="run">
+        <java jar="${bin}/${main}.jar" fork="true"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${bin}"/>
+    </target>
+
+</project>
