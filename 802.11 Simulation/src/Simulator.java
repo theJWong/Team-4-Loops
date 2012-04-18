@@ -2,6 +2,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/* Simulator    */
 public class Simulator
 {
    private static final double C = 3.0e8;
