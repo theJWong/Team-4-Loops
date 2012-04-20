@@ -70,6 +70,7 @@ class Node extends Thread
                 status = Status.GOT_ACK;
             } else if (frame.getType() == Frame.Type.DATA) {
                 status = Status.BUSY;
+                buffer.receive(frame);
                 send(Frame.Type.ACK, 0);
             }
         }
@@ -102,6 +103,10 @@ class Node extends Thread
 
     public Location getLocation() {
         return location;
+    }
+
+    public Buffer getBuffer() {
+        return buffer;
     }
 
     public double getDistance(Node node) {

@@ -26,7 +26,7 @@ class Simulator
             for (int j=0; j<numNodes; j++) {
                 if(i != j) {
                     if (nodes[i].isInRange(nodes[j]) && !receivers.containsKey(nodes[j].getID())) {
-                        Transmission t = new Transmission(nodes[i],nodes[j],arrivalRate,packetSize,numPackets);
+                        Transmission t = new Transmission(nodes[i],nodes[j],arrivalRate,packetSize,numPackets*(receivers.size()+1));
                         transmissions.add(t);
                         receivers.put(nodes[j].getID(),new Integer(0));
                     }

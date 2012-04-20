@@ -25,6 +25,15 @@ class Buffer
         return packetSize;
     }
 
+    public int getTotalSize() {
+        int total = 0;
+        for (int i=0; i<buffer.size(); i++) {
+            Frame frame = buffer.get(i);
+            total += frame.getLength();
+        }
+        return(total);
+    }
+
     public byte[] getData() {
         return(data);
     }

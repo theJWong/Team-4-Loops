@@ -39,4 +39,8 @@ class Frame
     public void setData() {
         data = new byte[LEN];
     }
+
+    public int getLength() {
+        return LEN;
+    }
 }
