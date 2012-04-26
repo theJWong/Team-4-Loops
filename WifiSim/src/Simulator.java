@@ -3,20 +3,28 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 
+import javax.swing.JFrame;
+
 class Simulator
 {
-    public static void main(String[] args) {
+	Node[] nodes;
+	Queue<Transmission> transmissions;
+	Map<Node.ID,Integer> receivers;
+	
+    public Simulator(int size, int nNodes) {
 
         //user input
         int arrivalRate = 5000000; //5Mbps
         int packetSize = 1000; //bits
+        packetSize = size;
         int numPackets = 100;
-        int numNodes = 4;
+        int numNodes = 10;
+        numNodes = nNodes;
 
         //simulation setup
-        Node[] nodes = new Node[numNodes];
-        Queue<Transmission> transmissions = new LinkedList<Transmission>();
-        Map<Node.ID,Integer> receivers = new HashMap<Node.ID,Integer>();
+        nodes = new Node[numNodes];
+        transmissions = new LinkedList<Transmission>();
+        receivers = new HashMap<Node.ID,Integer>();
 
         for (int i=0; i<numNodes; i++) {
             nodes[i] = new Node(i);
@@ -34,7 +42,16 @@ class Simulator
             }
         }
 
-        //simulation start
+    }
+    
+    public Node[] getNodes()
+    {
+    	return nodes;
+    }
+    
+    public String run()
+    {
+    	//simulation start
         while (transmissions.size() > 0) {
             Transmission t = transmissions.poll();
             try {
@@ -43,5 +60,6 @@ class Simulator
                 System.err.println("Simulator: "+ie.toString());
             }
         }
+        return "";
     }
 }

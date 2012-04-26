@@ -5,8 +5,8 @@ class Location
     Location loction;
     int MAX_POS = 150;
     int MAX_DIS = 100;
-    private int x;
-    private int y;
+    int x;
+    int y;
 
     Location() {
         Random random = new Random();
