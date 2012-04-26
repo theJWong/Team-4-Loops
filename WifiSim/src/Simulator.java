@@ -11,13 +11,14 @@ class Simulator
 	Queue<Transmission> transmissions;
 	Map<Node.ID,Integer> receivers;
 	
-    public Simulator(int size, int nNodes) {
+    public Simulator(int size, int nNodes, int nPackets) {
 
         //user input
         int arrivalRate = 5000000; //5Mbps
         int packetSize = 1000; //bits
         packetSize = size;
         int numPackets = 100;
+        numPackets = nPackets;
         int numNodes = 10;
         numNodes = nNodes;
 

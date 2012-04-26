@@ -16,24 +16,42 @@ class Node extends Thread
     private Buffer buffer;
     private Location location;
     private Node node;
+    private double delay;
+    private double sum_delay;
+    private int collision;
 
     Node(int i) {
         id = ID.get(i);
         status = Status.IDLE;
         buffer = new Buffer();
         location = new Location();
+        delay = 0;
+        sum_delay = 0;
+        collision = 0;
     }
 
-    public void init(Node receiver, int arrivalRate, int packetSize, byte[] data) {
+    public void init(Node receiver, int arrivalRate, int packetSize, byte[] data, double delay) {
         node = receiver;
+        setDelay(delay);
+        node.setDelay(delay);
         buffer.init(arrivalRate,packetSize,data);
-        send(Frame.Type.RTS,0);
+        try {
+			send(Frame.Type.RTS,0);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public void run() {
         if (buffer.getData() != null) {
             if (status == Status.GOT_CTS) {
-                transmit();
+                try {
+					transmit();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             } else {
                 backoff();
             }
@@ -41,16 +59,20 @@ class Node extends Thread
         System.out.println(id+" finish");
     }
 
-    private void send(Frame.Type type, int length) {
+    private void send(Frame.Type type, int length) throws InterruptedException {
         Frame frame = new Frame(type, getID(), node.getID(), length);
+        sleep((int) (delay*1000.0));
+        sum_delay += delay;
         node.receive(frame, this);
         if (type != Frame.Type.DATA && type != Frame.Type.ACK) {
             System.out.println(id+" sent "+type+" to "+node.getID());
         }
     }
 
-    private void receive(Frame frame, Node node) {
+    private void receive(Frame frame, Node node) throws InterruptedException {
         this.node = node;
+        sleep((int) (delay*1000.0));
+        sum_delay += delay;
         if (frame.getType() != Frame.Type.DATA && frame.getType() != Frame.Type.ACK) {
             System.out.println(id+" receive "+frame.getType()+" from "+frame.getSource());
         }
@@ -63,6 +85,7 @@ class Node extends Thread
             }
         } else {
             if (frame.getType() == Frame.Type.RTS) {
+            	collision ++;
                 System.out.println(frame.getSource()+" should backoff");
             } else if (frame.getType() == Frame.Type.CTS) {
                 status = Status.GOT_CTS;
@@ -76,7 +99,7 @@ class Node extends Thread
         }
     }
 
-    public void transmit() {
+    public void transmit() throws InterruptedException {
         status = Status.BUSY;
         int data_len = buffer.getData().length;
         while (data_len > 0) {
@@ -86,8 +109,9 @@ class Node extends Thread
     }
 
     private void backoff() {
-        try {
-            Thread.currentThread().sleep(5000);
+        double t = (Math.pow(2.0, collision) - 1)/2.0;
+    	try {
+            sleep((int) t);
         } catch(InterruptedException ie) {
             System.err.println(ie.toString());
         }
@@ -119,5 +143,13 @@ class Node extends Thread
 
     public boolean isEmpty() {
         return(buffer.isEmpty());
+    }
+    
+    public void setDelay(double delay) {
+        this.delay = delay;
+    }
+    
+    public double getSumDelay() {
+    	return sum_delay;
     }
 }

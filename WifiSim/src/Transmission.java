@@ -26,23 +26,33 @@ class Transmission extends Thread
     }
 
     public void run() {
-        System.out.println(sender.getID()+" try sending to "+receiver.getID());
-        sender.init(receiver,arrivalRate,packetSize,data);
-        try {
-            sender.start();
-        } catch(IllegalThreadStateException ie) {
-        }
-
-//        double size = (double) receiver.getBuffer().getTotalSize();
+//      double size = (double) receiver.getBuffer().getTotalSize();
         double size = data.length;
         double propagation = (double) length / C;
         double transmit = size / bandwidth;
         double latency = propagation + transmit;
         double RTT = 2 * latency;
 
+        System.out.println(sender.getID()+" try sending to "+receiver.getID());
+        sender.init(receiver,arrivalRate,packetSize,data,propagation);
+        sender.setDelay(transmit);
+        try {
+            sender.start();
+        } catch(IllegalThreadStateException ie) {
+        }
+
+        while(sender.getState() != Thread.State.TERMINATED) {
+        	try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
         // Calculate transfer time (varied based on asychronous transfer)
         double totalSize = size;
         double transferTime = 0;
+        double sum_delay = sender.getSumDelay() + receiver.getSumDelay();
         transferTime = (RTT + poisson(arrivalRate, size)) + (1 / bandwidth) * size;
         double tempTime = transferTime;
         while (totalSize > 0)
@@ -57,6 +67,7 @@ class Transmission extends Thread
         System.out.println(prefix()+"File Size : " + size + " bits");
         System.out.println(prefix()+"Total Transfer Time: " + transferTime + " seconds");
         System.out.println(prefix()+"Throughput: " + throughput + " bps");
+        System.out.println(prefix()+"Delay: " + sum_delay + " seconds");
     }
 
     public int poisson(double lambda) {
@@ -101,6 +112,6 @@ class Transmission extends Thread
     }
 
     private String prefix() {
-        return("["+sender.getID()+"->"+receiver.getID()+"]");
+        return("["+sender.getID()+"->"+receiver.getID()+"] ");
     }
 }

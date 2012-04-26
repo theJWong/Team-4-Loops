@@ -3,7 +3,7 @@
 
     <property name="src" value="src"/>
     <property name="bin" value="bin"/>
-    <property name="main" value="Simulator"/>
+    <property name="main" value="WifiGUI"/>
     <property name="input" value="foo"/>
 
     <target name="compile" depends="clean">

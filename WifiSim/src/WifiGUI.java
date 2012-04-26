@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,16 +33,25 @@ public class WifiGUI
         final NodePanel leftPanel2 = new NodePanel(new Node[0]);
         leftPanel2.setBorder(new LineBorder(Color.RED, 2));
         
+        
         //TOP PANEL top
         JPanel leftPanel1 = new JPanel();
+        //leftPanel1.setLayout(new BoxLayout(leftPanel1,BoxLayout.PAGE_AXIS));
         JLabel maxPacketSizeLabel = new JLabel("MaxPacketSize");
         final JTextField maxPacketSize = new JTextField("", 5);
+        maxPacketSize.setMaximumSize(maxPacketSize.getPreferredSize());
+        JLabel numOfPacketsLabel = new JLabel("Number of packets");
+        final JTextField numOfPackets = new JTextField("", 5);
+        numOfPackets.setMaximumSize(numOfPackets.getPreferredSize());
         JLabel numOfNodesLabel = new JLabel("Number of nodes");
         final JTextField numOfNodes = new JTextField("", 5);
+        numOfNodes.setMaximumSize(numOfNodes.getPreferredSize());
         JButton submitButton = new JButton("Submit");
         
         leftPanel1.add(maxPacketSizeLabel);
         leftPanel1.add(maxPacketSize);
+        leftPanel1.add(numOfPacketsLabel);
+        leftPanel1.add(numOfPackets);
         leftPanel1.add(numOfNodesLabel);
         leftPanel1.add(numOfNodes);
         leftPanel1.add(submitButton);
@@ -76,11 +86,13 @@ public class WifiGUI
 			  {
             	int nNodes = 0;
             	int packetSize = 0;
+            	int nPackets = 0;
             	try {
             		resultsBox.setText("");
             		packetSize = Integer.parseInt(maxPacketSize.getText().replace(" ", ""));
+            		nPackets = Integer.parseInt(numOfPackets.getText().replace(" ", ""));
             		nNodes = Integer.parseInt(numOfNodes.getText().replace(" ", ""));
-            		resultsBox.append("Max Packet Size: " + packetSize + "\nNumber of nodes: " + nNodes + '\n');
+            		resultsBox.append("Max Packet Size: " + packetSize + "\nNumber of packets: " + nPackets + "\nNumber of nodes: " + nNodes + '\n');
             	}
             	catch (Exception E)
             	{
@@ -89,7 +101,7 @@ public class WifiGUI
             		resultsBox.append("Please enter appropriate entries into all fields!");
             	}
             	
-                Simulator a = new Simulator(packetSize, nNodes);
+                Simulator a = new Simulator(packetSize, nNodes, nPackets);
         		leftPanel2.setNodes(a.getNodes());
         		a.run();
         		
