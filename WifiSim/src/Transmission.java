@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 class Transmission extends Thread
@@ -13,6 +14,7 @@ class Transmission extends Thread
     private double length;
     private double delay;
     private double throughput;
+    private ArrayList<Double> delayOfPacket = new ArrayList<Double>();
 
     Transmission(Node sender, Node receiver, int rate, 
         int size, int num) {
@@ -57,8 +59,21 @@ class Transmission extends Thread
         double tempTime = transferTime;
         while (totalSize > 0)
         {
-            tempTime += poisson(RTT)  + (1 / bandwidth) * size;
+            double temp = poisson(RTT)  + (1 / bandwidth) * size;
+            delayOfPacket.add(temp);
+            tempTime += temp;
             totalSize -= packetSize;
+        }
+        
+        double jitter = 0;
+        if (!delayOfPacket.isEmpty()) {
+         double avgDelay = sum_delay / delayOfPacket.size();
+         for (int i = 0; i < delayOfPacket.size(); i++)
+         {
+            double temp = ((sender.getSumDelay() - (receiver.getSumDelay() - poisson(RTT))) - avgDelay);
+            jitter += Math.abs(temp);
+         }
+         jitter = jitter / delayOfPacket.size();
         }
 
         double throughput = size / tempTime;
@@ -68,6 +83,7 @@ class Transmission extends Thread
         System.out.println(prefix()+"Total Transfer Time: " + transferTime + " seconds");
         System.out.println(prefix()+"Throughput: " + throughput + " bps");
         System.out.println(prefix()+"Delay: " + sum_delay + " seconds");
+        System.out.println(prefix()+"Jitter: " + jitter + " ms");
     }
 
     public int poisson(double lambda) {

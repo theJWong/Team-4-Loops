@@ -37,7 +37,7 @@ public class WifiGUI
         //TOP PANEL top
         JPanel leftPanel1 = new JPanel();
         //leftPanel1.setLayout(new BoxLayout(leftPanel1,BoxLayout.PAGE_AXIS));
-        JLabel maxPacketSizeLabel = new JLabel("MaxPacketSize");
+        JLabel maxPacketSizeLabel = new JLabel("MaxPacketSize (in Bytes)");
         final JTextField maxPacketSize = new JTextField("", 5);
         maxPacketSize.setMaximumSize(maxPacketSize.getPreferredSize());
         JLabel numOfPacketsLabel = new JLabel("Number of packets");
