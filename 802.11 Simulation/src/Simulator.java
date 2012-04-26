@@ -85,6 +85,7 @@ public class Simulator
          System.out.println("Total Transfer Time: " + transferTime + " seconds");
          System.out.println("Throughput: " + throughput + " bps");
          size += 100000000;
+         System.out.println("JITTER: ");
       }
    }
    
