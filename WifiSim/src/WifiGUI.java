@@ -101,7 +101,7 @@ public class WifiGUI
             		resultsBox.append("Please enter appropriate entries into all fields!");
             	}
             	
-                Simulator a = new Simulator(packetSize, nNodes, nPackets);
+                Simulator a = new Simulator(packetSize*8, nNodes, nPackets);
         		leftPanel2.setNodes(a.getNodes());
         		a.run();
         		
