@@ -18,7 +18,7 @@ int main()
 	struct sockaddr_in server_addr , client_addr;
 
 	//GET Message size
-	printf("Please enter max message size to receive: ");
+	printf("Please enter max message size to receive(bytes): ");
 	char temp[100];
 	gets(temp);
 	int buffer_size = atoi(temp);

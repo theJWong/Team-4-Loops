@@ -23,7 +23,7 @@ int main()
     struct timeval tv_end;
 
 	//GET Message size
-	printf("Please enter max message size to send: ");
+	printf("Please enter max message size to send(bytes): ");
 	char temp[100];
 	gets(temp);
 	int buffer_size = atoi(temp);
@@ -84,6 +84,7 @@ int main()
 
 	//Set # of bytes to send here
 	int bytes_sent = buffer_size;
+    long total_bytes = 0;
 
 	int counter = 0;
 	//Loop for # of transactions
@@ -93,6 +94,9 @@ int main()
 		//Send the data				
 		int sent = sendto(sock, send_data, bytes_sent, 0, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
 		printf("%d bytes sent to server (%s)\n", bytes_sent, hostname);
+        if (sent > 0) {
+            total_bytes += bytes_sent;
+        }
 
 		// PROBLEM HERE: Need to figure out how to set timeout on recvfrom because it locks up (keeps waiting) if no response is received 
 		//recvfrom keeps waiting until it receives something ----> FIXED ABOVE
@@ -106,6 +110,7 @@ int main()
 		{
 			printf("%d bytes received back from the server (%s)\n", bytes_read, hostname);
 			successful_packets++;
+            total_bytes += buffer_size;
 		}
 		else
 		 	printf("Packet lost\n");
@@ -123,7 +128,9 @@ int main()
 	//double dif = difftime (end,start);
     double dif = labs(start - end);
 
+    double throughput = (total_bytes*8)/(dif/1000000.0);
 
-	printf("Avg RTT for %d transactions: %.9lf microseconds.\n", num_loop, dif/num_loop);
+	printf("Avg RTT for %d transactions: %.3lf microseconds.\n", num_loop, dif/num_loop);
+    printf("Effective throughput: %.3lf bits/sec.\n", throughput);
 	printf("%d packets lost.\n", num_loop-successful_packets);
 }
